@@ -18,7 +18,7 @@ type Config struct {
 var Root Config
 
 func Load() {
-	_, _ = godotenv.Read()
+	_ = godotenv.Load()
 
 	err := envconfig.Process("APP", &Root)
 	if err != nil {
