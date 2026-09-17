@@ -56,6 +56,8 @@ func NewClient(ctx context.Context, cfg section.RepositoryPostgres) (*Client, er
 	sqlDB := sql.OpenDB(
 		pgdriver.NewConnector(
 			pgdriver.WithDSN(dsn),
+			pgdriver.WithReadTimeout(cfg.ReadTimeout),
+			pgdriver.WithWriteTimeout(cfg.WriteTimeout),
 		),
 	)
 
@@ -71,10 +73,11 @@ func NewClient(ctx context.Context, cfg section.RepositoryPostgres) (*Client, er
 	defer cancel()
 
 	if err := sqlDB.PingContext(pingCtx); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("could not connect to postgres: %w", err)
 	}
 
 	return &Client{
+		_bunDB:   db,
 		rawBunDB: db,
 		cfg:      cfg,
 	}, nil
