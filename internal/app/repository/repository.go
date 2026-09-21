@@ -8,10 +8,6 @@ import (
 	"github.com/Dopesonic/catalog-service/internal/app/entity"
 )
 
-type Migrate interface {
-	Migrate(ctx context.Context) (oldVer, newVer int64, err error)
-}
-
 type (
 	Category interface {
 		Create(ctx context.Context, category entity.Category) error
@@ -27,5 +23,9 @@ type (
 		Update(ctx context.Context, product entity.Product) error
 		Delete(ctx context.Context, guid uuid.UUID) error
 		List(ctx context.Context, name *string, categoryGUID *uuid.UUID) ([]entity.Product, error)
+	}
+
+	Migrate interface {
+		Migrate(ctx context.Context) (oldVer, newVer int64, err error)
 	}
 )
