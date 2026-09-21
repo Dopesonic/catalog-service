@@ -1,4 +1,4 @@
-package category
+package pproduct
 
 import (
 	"context"
@@ -67,7 +67,7 @@ func (r *repoPg) List(ctx context.Context, name *string, categoryGUID *uuid.UUID
 	query := r.NewSelect().Model(&products)
 
 	if name != nil {
-		query = query.Where("name LIKE ?", *name)
+		query = query.Where("name = ?", *name)
 	}
 	if categoryGUID != nil {
 		query = query.Where("category_guid = ?", *categoryGUID)

@@ -1,4 +1,4 @@
-package category
+package pcategory
 
 import (
 	"context"
@@ -67,7 +67,7 @@ func (r *repoPg) List(ctx context.Context, name *string) ([]entity.Category, err
 	query := r.NewSelect().Model(&categories)
 
 	if name != nil {
-		query = query.Where("name LIKE ?", *name)
+		query = query.Where("name = ?", *name)
 	}
 	err := query.Scan(ctx)
 
