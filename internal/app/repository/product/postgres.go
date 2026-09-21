@@ -1,4 +1,4 @@
-package category
+package pproduct
 
 import (
 	"context"
