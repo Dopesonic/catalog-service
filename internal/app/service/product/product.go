@@ -4,21 +4,22 @@ import (
 	"context"
 	"time"
 
+	"github.com/gofrs/uuid"
+
 	"github.com/Dopesonic/catalog-service/internal/app/entity"
 	"github.com/Dopesonic/catalog-service/internal/app/repository"
 	"github.com/Dopesonic/catalog-service/internal/app/service"
-	"github.com/gofrs/uuid"
 )
 
 type srv struct {
-	repoCategory repository.Category
 	repoProduct  repository.Product
+	repoCategory repository.Category
 }
 
-func NewService(repoCategory repository.Category, repoProduct repository.Product) service.Product {
+func NewService(repoProduct repository.Product, repoCategory repository.Category) service.Product {
 	return &srv{
-		repoCategory: repoCategory,
 		repoProduct:  repoProduct,
+		repoCategory: repoCategory,
 	}
 }
 
@@ -35,7 +36,7 @@ func (s *srv) Create(ctx context.Context, req entity.RequestProductCreate) (enti
 	if err != nil {
 		return entity.Product{}, err
 	}
-	if len(cats) > 0 {
+	if len(cats) == 0 {
 		return entity.Product{}, entity.ErrNotFound
 	}
 
@@ -67,7 +68,7 @@ func (s *srv) Update(ctx context.Context, guid uuid.UUID, req entity.RequestProd
 	if err != nil {
 		return entity.Product{}, err
 	}
-	if len(prods) > 0 {
+	if len(prods) == 0 {
 		return entity.Product{}, entity.ErrNotFound
 	}
 
@@ -98,7 +99,7 @@ func (s *srv) Update(ctx context.Context, guid uuid.UUID, req entity.RequestProd
 		if err != nil {
 			return entity.Product{}, err
 		}
-		if len(cats) > 0 {
+		if len(cats) == 0 {
 			return entity.Product{}, entity.ErrNotFound
 		}
 		currentProd.CategoryGUID = req.CategoryGUID
@@ -118,7 +119,7 @@ func (s *srv) Delete(ctx context.Context, guid uuid.UUID) error {
 	if err != nil {
 		return err
 	}
-	if len(prods) > 0 {
+	if len(prods) == 0 {
 		return entity.ErrNotFound
 	}
 

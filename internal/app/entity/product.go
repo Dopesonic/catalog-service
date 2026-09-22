@@ -60,22 +60,22 @@ func (r *RequestProductList) Validate() error {
 }
 
 type ResponseProductCreate struct {
-	GUID        uuid.UUID `json:"guid"`
-	Name        string    `json:"name"`
-	Description *string   `json:"description"`
-	Price       int64     `json:"price"`
-	CategoryID  uuid.UUID `json:"category_guid"`
-	CreatedAt   time.Time `json:"created_at"`
+	GUID         uuid.UUID `json:"guid"`
+	Name         string    `json:"name"`
+	Description  *string   `json:"description"`
+	Price        int64     `json:"price"`
+	CategoryGUID uuid.UUID `json:"category_guid"`
+	CreatedAt    time.Time `json:"created_at"`
 }
 
 type ResponseProductUpdate struct {
-	GUID        uuid.UUID `json:"guid"`
-	Name        string    `json:"name"`
-	Description *string   `json:"description"`
-	Price       int64     `json:"price"`
-	CategoryID  uuid.UUID `json:"category_guid"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	GUID         uuid.UUID `json:"guid"`
+	Name         string    `json:"name"`
+	Description  *string   `json:"description"`
+	Price        int64     `json:"price"`
+	CategoryGUID uuid.UUID `json:"category_guid"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
 }
 
 type ResponseProductList struct {
@@ -83,11 +83,11 @@ type ResponseProductList struct {
 }
 
 type ResponseProductListItem struct {
-	GUID        uuid.UUID `json:"guid"`
-	Name        string    `json:"name"`
-	Description *string   `json:"description"`
-	Price       int64     `json:"price"`
-	CategoryID  uuid.UUID `json:"category_guid"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	GUID         uuid.UUID `json:"guid"`
+	Name         string    `json:"name"`
+	Description  *string   `json:"description"`
+	Price        int64     `json:"price"`
+	CategoryGUID uuid.UUID `json:"category_guid"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
 }

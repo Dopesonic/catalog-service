@@ -52,9 +52,9 @@ type ResponseCategoryUpdate struct {
 }
 
 type ResponseCategoryList struct {
-	Data []ResponseCategoryListIem `json:"data"`
+	Data []ResponseCategoryListItem `json:"data"`
 }
-type ResponseCategoryListIem struct {
+type ResponseCategoryListItem struct {
 	GUID      uuid.UUID `json:"guid"`
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
