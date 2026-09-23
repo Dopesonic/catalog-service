@@ -106,7 +106,7 @@ func (h *handler) List(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ListItems := make([]entity.ResponseCategoryListItem, 0, len(categories))
+	listItems := make([]entity.ResponseCategoryListItem, 0, len(categories))
 	for _, cat := range categories {
 		item := entity.ResponseCategoryListItem{
 			GUID:      cat.GUID,
@@ -114,11 +114,11 @@ func (h *handler) List(w http.ResponseWriter, r *http.Request) {
 			CreatedAt: cat.CreatedAt,
 			UpdatedAt: cat.UpdatedAt,
 		}
-		ListItems = append(ListItems, item)
+		listItems = append(listItems, item)
 	}
 
 	response := entity.ResponseCategoryList{
-		Data: ListItems,
+		Data: listItems,
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)

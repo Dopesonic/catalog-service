@@ -127,5 +127,5 @@ func (s *srv) Delete(ctx context.Context, guid uuid.UUID) error {
 }
 
 func (s *srv) List(ctx context.Context, req entity.RequestProductList) ([]entity.Product, error) {
-	return s.repoProduct.List(ctx, nil, req.GUID)
+	return s.repoProduct.List(ctx, nil, req.CategoryGUID)
 }

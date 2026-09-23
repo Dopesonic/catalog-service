@@ -63,6 +63,11 @@ func (h *handler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := req.Validate(); err != nil {
+		httph.HandleError(w, err)
+		return
+	}
+
 	updatedProd, err := h.srv.Update(r.Context(), guid, req)
 	if err != nil {
 		httph.HandleError(w, err)

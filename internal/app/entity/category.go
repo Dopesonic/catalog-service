@@ -33,7 +33,7 @@ type RequestCategoryUpdate struct {
 }
 
 func (r *RequestCategoryUpdate) Validate() error {
-	if r.Name == "" && len(r.Name) < 2 {
+	if r.Name != "" && len(r.Name) < 2 {
 		return ErrIncorrectParameters
 	}
 	return nil
