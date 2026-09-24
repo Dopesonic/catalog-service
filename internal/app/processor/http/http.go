@@ -16,10 +16,21 @@ type httpProc struct {
 	addr   string
 }
 
-func NewHTTP(hHealth rhandler.Health, cfg section.ProcessorWebServer) *httpProc {
+func NewHTTP(
+	hHealth rhandler.Health,
+	hCategory rhandler.Category,
+	hProduct rhandler.Product,
+	cfg section.ProcessorWebServer,
+) *httpProc {
 	r := mux.NewRouter()
 	r.NotFoundHandler = http.HandlerFunc(handlerNotFound)
+
 	vGenericRegHealthCheck(r, hHealth)
+
+	rV1 := r.PathPrefix("/v1").Subrouter()
+	v1RegCategoryHandler(rV1, hCategory)
+	v1RegProductHandler(rV1, hProduct)
+
 	err := r.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 		tpl, err := route.GetPathTemplate()
 		if err != nil {
@@ -30,7 +41,7 @@ func NewHTTP(hHealth rhandler.Health, cfg section.ProcessorWebServer) *httpProc 
 		if err != nil {
 			return nil
 		}
-		log.Printf("Registered route: %s %s ", tpl, methods)
+		log.Printf("Route: %s %s ", methods, tpl)
 		return nil
 	})
 	if err != nil {
