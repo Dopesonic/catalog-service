@@ -29,7 +29,7 @@ func (v *defaultValidator) Engine() any {
 func (v *defaultValidator) ValidateStruct(obj any) error {
 	val := reflect.ValueOf(obj)
 
-	if val.Kind() == reflect.Ptr {
+	if val.Kind() == reflect.Pointer {
 		val = val.Elem()
 	}
 
