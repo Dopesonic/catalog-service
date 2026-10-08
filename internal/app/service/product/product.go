@@ -24,7 +24,7 @@ func NewService(repoProduct repository.Product, repoCategory repository.Category
 }
 
 func (s *srv) Create(ctx context.Context, req entity.RequestProductCreate) (entity.Product, error) {
-	existing, err := s.repoProduct.List(ctx, &req.Name, nil)
+	existing, err := s.repoProduct.List(ctx, &req.Name, nil, nil, nil)
 	if err != nil {
 		return entity.Product{}, err
 	}
@@ -59,8 +59,8 @@ func (s *srv) Create(ctx context.Context, req entity.RequestProductCreate) (enti
 	return product, nil
 }
 
-func (s *srv) GetByGUIDs(ctx context.Context, guid []uuid.UUID) ([]entity.Product, error) {
-	return s.repoProduct.GetByGUIDs(ctx, guid)
+func (s *srv) GetByGUIDs(ctx context.Context, guids []uuid.UUID) ([]entity.Product, error) {
+	return s.repoProduct.GetByGUIDs(ctx, guids)
 }
 
 func (s *srv) Update(ctx context.Context, guid uuid.UUID, req entity.RequestProductUpdate) (entity.Product, error) {
@@ -75,7 +75,7 @@ func (s *srv) Update(ctx context.Context, guid uuid.UUID, req entity.RequestProd
 	currentProd := prods[0]
 
 	if req.Name != "" {
-		existingProds, err := s.repoProduct.List(ctx, &req.Name, nil)
+		existingProds, err := s.repoProduct.List(ctx, &req.Name, nil, nil, nil)
 		if err != nil {
 			return entity.Product{}, err
 		}
@@ -127,5 +127,5 @@ func (s *srv) Delete(ctx context.Context, guid uuid.UUID) error {
 }
 
 func (s *srv) List(ctx context.Context, req entity.RequestProductList) ([]entity.Product, error) {
-	return s.repoProduct.List(ctx, nil, req.CategoryGUID)
+	return s.repoProduct.List(ctx, nil, req.CategoryGUID, req.MinPrice, req.MaxPrice)
 }

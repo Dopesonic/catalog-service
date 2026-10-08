@@ -8,7 +8,7 @@ import (
 
 type httpCoder interface {
 	error
-	HttpStatus() int
+	HTTPStatus() int
 }
 
 func SendJSON(w http.ResponseWriter, status int, data interface{}) {
@@ -30,7 +30,7 @@ func sendError(w http.ResponseWriter, status int, err error) {
 func HandleError(w http.ResponseWriter, err error) {
 	var hc httpCoder
 	if errors.As(err, &hc) {
-		sendError(w, hc.HttpStatus(), hc)
+		sendError(w, hc.HTTPStatus(), hc)
 		return
 	}
 	sendError(w, http.StatusInternalServerError, err)
