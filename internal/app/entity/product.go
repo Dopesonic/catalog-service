@@ -35,7 +35,7 @@ type RequestProductUpdate struct {
 }
 
 type RequestProductList struct {
-	CategoryGUID *uuid.UUID `json:"guid" binding:"omitempty"`
+	CategoryGUID *uuid.UUID `json:"category_guid" binding:"omitempty"`
 	MinPrice     *int64     `json:"min_price" binding:"omitempty,gt=0"`
 	MaxPrice     *int64     `json:"max_price" binding:"omitempty,gt=0"`
 }
