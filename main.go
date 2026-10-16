@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
-	"log"
+	"os"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/Dopesonic/catalog-service/internal/app/config"
 	hcategory "github.com/Dopesonic/catalog-service/internal/app/handler/http/category"
@@ -18,23 +20,27 @@ import (
 
 func main() {
 	ctx := context.Background()
-	config.Load()
+
+	config.Load(config.LoadArgs{
+		Output:          os.Stdout,
+		EnableSimpleLog: true,
+	})
+
 	cfg := config.Root
 
 	pgClient, err := rcpostgres.NewClient(ctx, cfg.Repository.Postgres)
 	if err != nil {
-		log.Fatalf("Failed to connect to PostgreSQL: %v", err)
+		log.Fatal().Err(err).Msg("Failed to connect to postgres")
 	}
 
 	oldVer, newVer, err := pgClient.Migrate(ctx)
 	if err != nil {
-		log.Fatalf("Failed to run migrations: %v", err)
+		log.Fatal().Err(err).Msg("Failed to run migrations")
 	}
-
 	if oldVer != newVer {
-		log.Printf("Database migrated old_version=%d new_version=%d", oldVer, newVer)
+		log.Info().Int64("old_version", oldVer).Int64("new_version", newVer).Msg("Database migrated")
 	} else {
-		log.Printf("Database is up to date version=%d", newVer)
+		log.Info().Int64("version", newVer).Msg("Database is up to date")
 	}
 
 	categoryRepo := pcategory.NewRepoFromPostgres(pgClient)
@@ -49,6 +55,6 @@ func main() {
 
 	httpServer := rprocessor.NewHTTP(hHealth, hCategory, hProduct, cfg.Processor.WebServer)
 	if err := httpServer.Serve(); err != nil {
-		log.Fatalf("HTTP server failed: %v", err)
+		log.Fatal().Err(err).Msg("Failed to start HTTP server")
 	}
 }

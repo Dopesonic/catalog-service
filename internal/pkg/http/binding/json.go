@@ -1,7 +1,6 @@
 package binding
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/Dopesonic/catalog-service/internal/pkg/http/httph"
@@ -9,18 +8,24 @@ import (
 
 type jsonBinding struct{}
 
+var _ Binding = &jsonBinding{}
+
 func (j jsonBinding) Name() string {
 	return "JSON"
 }
 
 func (j jsonBinding) Bind(req *http.Request, obj any) error {
 	if req == nil || req.Body == nil {
-		return errors.New("invalid request body")
+		return &bindingError{msg: "invalid request"}
 	}
 
 	if err := httph.DecodeJSON(req, obj); err != nil {
-		return err
+		return &bindingError{msg: "invalid parameters"}
 	}
 
-	return validate(obj)
+	if err := validate(obj); err != nil {
+		return &bindingError{msg: err.Error()}
+	}
+
+	return nil
 }
