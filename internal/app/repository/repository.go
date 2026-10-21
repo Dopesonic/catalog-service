@@ -9,6 +9,10 @@ import (
 )
 
 type (
+	Migrate interface {
+		Migrate(ctx context.Context) (oldVer, newVer int64, err error)
+	}
+
 	Transactional interface {
 		InsideTx(ctx context.Context, fn func(ctx context.Context) error) error
 	}
@@ -29,9 +33,5 @@ type (
 		Update(ctx context.Context, product entity.Product) error
 		Delete(ctx context.Context, guid uuid.UUID) error
 		List(ctx context.Context, name *string, categoryGUID *uuid.UUID, minPrice, maxPrice *int64) ([]entity.Product, error)
-	}
-
-	Migrate interface {
-		Migrate(ctx context.Context) (oldVer, newVer int64, err error)
 	}
 )
