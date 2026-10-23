@@ -37,6 +37,6 @@ func (p *procMigrate) job(ctx context.Context) {
 		log.Info().
 			Int64("old_version", oldVer).
 			Int64("new_version", newVer).
-			Msg("Database is up to date")
+			Msg("Repository schema is up to date")
 	}
 }
