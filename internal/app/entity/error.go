@@ -61,6 +61,19 @@ func NewAppError(kind ErrorKind, message string) *AppError {
 	return &AppError{Kind: kind, Message: message}
 }
 
+func KindFromHTTPStatus(status int) ErrorKind {
+	switch status {
+	case http.StatusBadRequest:
+		return KindInvalidArgument
+	case http.StatusNotFound:
+		return KindNotFound
+	case http.StatusConflict:
+		return KindAlreadyExists
+	default:
+		return KindUnknown
+	}
+}
+
 var (
 	ErrNotFound            = NewAppError(KindNotFound, "not found")
 	ErrAlreadyExists       = NewAppError(KindAlreadyExists, "already exists")
