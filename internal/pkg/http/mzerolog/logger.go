@@ -56,6 +56,10 @@ func (m *middleware) Callback(next http.Handler) http.Handler {
 		ev.Ctx(r.Context())
 		ev.Str("exec_time", execTime.String())
 		ev.Str("client_ip", r.RemoteAddr)
+		status := httph.ErrorGetStatusCode(r)
+		if status > 0 {
+			ev.Int("http_status_code", status)
+		}
 		ev.Msg(mb.String())
 	})
 }
