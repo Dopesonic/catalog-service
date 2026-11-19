@@ -3,6 +3,8 @@ module github.com/Dopesonic/catalog-service
 go 1.26.0
 
 require (
+	github.com/getsentry/sentry-go v0.46.2
+	github.com/getsentry/sentry-go/zerolog v0.46.2
 	github.com/go-playground/form/v4 v4.5.0
 	github.com/go-playground/validator/v10 v10.30.5
 	github.com/gofrs/uuid v4.4.0+incompatible
@@ -24,6 +26,7 @@ require (
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
+	github.com/buger/jsonparser v1.1.2 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.7 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.15 // indirect
