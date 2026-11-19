@@ -9,6 +9,7 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/rs/zerolog/log"
 	"github.com/urfave/cli/v2"
 
@@ -18,6 +19,7 @@ import (
 	hcategory "github.com/Dopesonic/catalog-service/internal/app/handler/http/category"
 	rhealth "github.com/Dopesonic/catalog-service/internal/app/handler/http/health"
 	hproduct "github.com/Dopesonic/catalog-service/internal/app/handler/http/product"
+	mmetric "github.com/Dopesonic/catalog-service/internal/app/monitor/metric"
 	"github.com/Dopesonic/catalog-service/internal/app/processor"
 	pgateway "github.com/Dopesonic/catalog-service/internal/app/processor/gateway"
 	pgrpc "github.com/Dopesonic/catalog-service/internal/app/processor/grpc"
@@ -157,8 +159,15 @@ func (b *Builder) BuildServiceCategory() {
 
 func (b *Builder) BuildServiceProduct() {
 	b.exec(func(b *Builder) {
-		srv := sproduct.NewService(b.productRepo, b.categoryRepo)
-		b.productService = srv
+		productMetrics, err := mmetric.NewPrometheusProduct(
+			prometheus.DefaultRegisterer,
+		)
+		if err != nil {
+			b.err = fmt.Errorf("init product metrics: %w", err)
+			return
+		}
+
+		b.productService = sproduct.NewService(b.productRepo, b.categoryRepo, productMetrics)
 	}, b.productRepo, b.categoryRepo)
 }
 

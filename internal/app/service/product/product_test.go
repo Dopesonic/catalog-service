@@ -30,6 +30,7 @@ func (s *createProductSuite) SetupTest() {
 	s.srv = &srv{
 		repoProduct:  s.productRepo,
 		repoCategory: s.categoryRepo,
+		metrics:      noopProductMetrics{},
 	}
 }
 
@@ -38,11 +39,12 @@ func TestCreateProductSuite(t *testing.T) {
 }
 
 func (s *createProductSuite) TestNewService() {
-	actual := NewService(s.productRepo, s.categoryRepo)
+	actual := NewService(s.productRepo, s.categoryRepo, noopProductMetrics{})
 
 	expected := &srv{
 		repoProduct:  s.productRepo,
 		repoCategory: s.categoryRepo,
+		metrics:      noopProductMetrics{},
 	}
 
 	s.Equal(expected, actual)
@@ -275,6 +277,7 @@ func (s *getByGUIDsProductSuite) SetupTest() {
 	s.srv = &srv{
 		repoProduct:  s.productRepo,
 		repoCategory: s.categoryRepo,
+		metrics:      noopProductMetrics{},
 	}
 }
 
@@ -363,6 +366,7 @@ func (s *deleteProductSuite) SetupTest() {
 	s.srv = &srv{
 		repoProduct:  s.productRepo,
 		repoCategory: s.categoryRepo,
+		metrics:      noopProductMetrics{},
 	}
 }
 
@@ -489,6 +493,7 @@ func (s *listProductsSuite) SetupTest() {
 	s.srv = &srv{
 		repoProduct:  s.productRepo,
 		repoCategory: s.categoryRepo,
+		metrics:      noopProductMetrics{},
 	}
 }
 
@@ -602,6 +607,7 @@ func (s *updateProductSuite) SetupTest() {
 	s.srv = &srv{
 		repoProduct:  s.productRepo,
 		repoCategory: s.categoryRepo,
+		metrics:      noopProductMetrics{},
 	}
 }
 

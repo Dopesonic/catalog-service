@@ -7,6 +7,7 @@ import (
 	"github.com/gofrs/uuid"
 
 	"github.com/Dopesonic/catalog-service/internal/app/entity"
+	"github.com/Dopesonic/catalog-service/internal/app/monitor"
 	"github.com/Dopesonic/catalog-service/internal/app/repository"
 	"github.com/Dopesonic/catalog-service/internal/app/service"
 )
@@ -14,16 +15,36 @@ import (
 type srv struct {
 	repoProduct  repository.Product
 	repoCategory repository.Category
+	metrics      monitor.ProductMetrics
 }
 
-func NewService(repoProduct repository.Product, repoCategory repository.Category) service.Product {
+type noopProductMetrics struct{}
+
+type noopProductCreateMetric struct{}
+
+func (noopProductMetrics) Create() monitor.ProductCreateMetric {
+	return noopProductCreateMetric{}
+}
+
+func (noopProductCreateMetric) Success(int64) {}
+
+func (noopProductCreateMetric) Failed(error) {}
+
+func NewService(
+	repoProduct repository.Product,
+	repoCategory repository.Category,
+	metrics monitor.ProductMetrics,
+) service.Product {
 	return &srv{
 		repoProduct:  repoProduct,
 		repoCategory: repoCategory,
+		metrics:      metrics,
 	}
 }
 
 func (s *srv) Create(ctx context.Context, req entity.RequestProductCreate) (entity.Product, error) {
+	createMetric := s.metrics.Create()
+
 	var product entity.Product
 	err := s.repoProduct.InsideTx(ctx, func(txCtx context.Context) error {
 		existing, err := s.repoProduct.List(txCtx, &req.Name, nil, nil, nil)
@@ -57,9 +78,11 @@ func (s *srv) Create(ctx context.Context, req entity.RequestProductCreate) (enti
 		return s.repoProduct.Create(txCtx, product)
 	})
 	if err != nil {
+		createMetric.Failed(err)
 		return entity.Product{}, err
 	}
 
+	createMetric.Success(product.Price)
 	return product, nil
 }
 
