@@ -29,9 +29,12 @@ func NewHTTP(
 	hCategory rhandler.Category,
 	hProduct rhandler.Product,
 	cfg section.ProcessorWebServer,
+	middlewares []httph.Middleware,
 ) processor.Processor {
 	r := mux.NewRouter()
 	r.NotFoundHandler = http.HandlerFunc(handlerNotFound)
+
+	r.Use(middlewaresToGorilla(middlewares)...)
 
 	r.Use(
 		httph.NewErrorMiddleware(),
