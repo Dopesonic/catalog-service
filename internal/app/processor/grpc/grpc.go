@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"github.com/rs/zerolog/log"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
@@ -21,7 +22,7 @@ type grpcProc struct {
 }
 
 func NewGRPC(catalogV1 catalogv1.CatalogServiceServer, cfg section.ProcessorGrpc) processor.Processor {
-	srv := grpc.NewServer()
+	srv := grpc.NewServer(grpc.StatsHandler(otelgrpc.NewServerHandler()))
 
 	catalogv1.RegisterCatalogServiceServer(srv, catalogV1)
 
